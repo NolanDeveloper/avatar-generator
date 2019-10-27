@@ -63,7 +63,11 @@ def load_pictures(root_dir):
 def classify_shape(filename):
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
-    classifier = pickle.load(open('classifier', 'r'))
+    classifier = pickle.load(open('classifier', 'rb'))
     picture = cv2.imread(filename, 0)
-    features = get_feature_vector(get_shape_points(picture, detector, predictor))
+    features = np.array(get_feature_vector(get_shape_points(picture, detector, predictor))).reshape(1, -1)
     return classifier.predict(features)
+
+
+if __name__ == '__main__':
+    print(classify_shape('man-21.jpg'))
