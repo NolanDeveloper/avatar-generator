@@ -78,12 +78,12 @@ def find_class(hsv):
 
 def map_to_cartoon(color):
     mapping = {"Blue": 1,
-               "Blue Gray": 1,
+               "Blue Gray": 3,
                "Brown": 0,
                "Brown Gray": 0,
                "Brown Black": 4,
                "Green": 2,
-               "Green Gray": 2, 
+               "Green Gray": 3, 
                "Other": 4}
     return mapping[color]
 
