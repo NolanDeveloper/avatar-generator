@@ -76,13 +76,25 @@ def find_class(hsv):
     return color_id
 
 
-def get_eye_color(facePhotoPath):
+def map_to_cartoon(color):
+    mapping = {"Blue": 1,
+               "Blue Gray": 1,
+               "Brown": 0,
+               "Brown Gray": 0,
+               "Brown Black": 4,
+               "Green": 2,
+               "Green Gray": 2, 
+               "Other": 4}
+    return mapping[color]
+
+
+def get_eye_color(facePhoto):
     """
     facePhoto - image as a numpy array in BGR color shceme
     """
     
     # Converting to HSV:
-    facePhoto = cv2.imread(facePhotoPath)
+    # facePhoto = cv2.imread(facePhotoPath)
     facePhoto = cv2.cvtColor(facePhoto, cv2.COLOR_BGR2HSV)
     height, width = facePhoto.shape[:2]
     
@@ -102,8 +114,8 @@ def get_eye_color(facePhotoPath):
     # Computing some metrics
     eyeDistance = np.linalg.norm(leCenter - reCenter)
     eyeRadius = eyeDistance / 15 # approx
-    faceWidth = np.linalg.norm(shape[0] - shape[16])
-    eyeDistanceCoeff = eyeDistance / faceWidth
+    # faceWidth = np.linalg.norm(shape[0] - shape[16])
+    # eyeDistanceCoeff = eyeDistance / faceWidth
     
     # Forming mask
     cv2.circle(imgMask, tuple(leCenter), int(eyeRadius), (255,255,255), -1)
@@ -119,11 +131,10 @@ def get_eye_color(facePhotoPath):
     main_color_index = np.argmax(eye_class[:len(eye_class)-1])
     total_vote = eye_class.sum()
     
-    return class_name[main_color_index], eyeDistanceCoeff
+    return map_to_cartoon(class_name[main_color_index])
 
 
 if __name__ == '__main__':
     args = parse_args()
-    color, coeff = get_eye_color(args['input'])
+    color = get_eye_color(args['input'])
     print(color)
-    print(coeff)
