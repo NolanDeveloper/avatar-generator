@@ -23,9 +23,9 @@ PARAMETERS = [
     "eyebrow_thickness"]
 
 
-def load_database():
+def load_database(db_path):
     database = {}
-    for name in glob.glob('cartoonset10k/*.csv'):
+    for name in glob.glob('{}/*.csv'.format(db_path)):
         with open(name, 'r') as file:
             image = {}
             for row in csv.reader(file):
