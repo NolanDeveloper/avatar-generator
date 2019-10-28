@@ -136,5 +136,6 @@ def get_eye_color(facePhoto):
 
 if __name__ == '__main__':
     args = parse_args()
-    color = get_eye_color(args['input'])
+    image = cv2.imread(args['input'])
+    color = get_eye_color(image)
     print(color)
