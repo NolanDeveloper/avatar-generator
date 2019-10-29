@@ -6,6 +6,7 @@ import time
 import os
 import sys
 import argparse
+import pickle
 from PIL import Image
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
@@ -49,14 +50,16 @@ def evaluate(image):
             os.mkdir(save_dir)
 
     # prepare network with trained parameters
-    net = get_network(network).to(device)
-    state = torch.load(ckpt_dir,  map_location=torch.device('cpu'))
-    net.load_state_dict(state['weight'])
+    # net = get_network(network).to(device)
+    # state = torch.load(ckpt_dir,  map_location=torch.device('cpu'))
+    # net.load_state_dict(state['weight'])
+
+    net = pickle.load(open('hair.dat', 'rb'))
 
     # this is the default setting for train_verbose.py
-    test_joint_transforms = jnt_trnsf.Compose([
-        jnt_trnsf.Safe32Padding()
-    ])
+    # test_joint_transforms = jnt_trnsf.Compose([
+    #     jnt_trnsf.Safe32Padding()
+    # ])
 
     test_image_transforms = std_trnsf.Compose([
         std_trnsf.ToTensor(),
@@ -64,19 +67,19 @@ def evaluate(image):
         ])
 
     # transforms only on mask
-    mask_transforms = std_trnsf.Compose([
-        std_trnsf.ToTensor()
-        ])
+    # mask_transforms = std_trnsf.Compose([
+    #     std_trnsf.ToTensor()
+    #     ])
 
-    test_loader = get_loader(dataset=args.dataset,
-                             data_dir=data_dir,
-                             train=False,
-                             joint_transforms=test_joint_transforms,
-                             image_transforms=test_image_transforms,
-                             mask_transforms=mask_transforms,
-                             batch_size=1,
-                             shuffle=False,
-                             num_workers=4)
+    # test_loader = get_loader(dataset=args.dataset,
+    #                          data_dir=data_dir,
+    #                          train=False,
+    #                          joint_transforms=test_joint_transforms,
+    #                          image_transforms=test_image_transforms,
+    #                          mask_transforms=mask_transforms,
+    #                          batch_size=1,
+    #                          shuffle=False,
+    #                          num_workers=4)
 
     # prepare measurements
     metric = MultiThresholdMeasures()
