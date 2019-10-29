@@ -4,8 +4,6 @@ import dlib
 from collections import OrderedDict
 import numpy as np
 
-import matplotlib.pyplot as plt
-
 FACIAL_LANDMARKS_IDXS = OrderedDict([
     ("mouth", (48, 68)),
     ("right_eyebrow", (17, 22)),
