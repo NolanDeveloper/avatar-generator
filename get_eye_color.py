@@ -4,6 +4,7 @@ import dlib
 from collections import OrderedDict
 import numpy as np
 
+import matplotlib.pyplot as plt
 
 FACIAL_LANDMARKS_IDXS = OrderedDict([
     ("mouth", (48, 68)),
@@ -16,16 +17,30 @@ FACIAL_LANDMARKS_IDXS = OrderedDict([
 ])
 
 
-class_name = ("Blue", "Blue Gray", "Brown", "Brown Gray", "Brown Black", "Green", "Green Gray", "Other")
-EyeColor = {
+def cvt_to_255(color_dic):
+    
+    def cvt_tuple(val):
+        return (179 * val[0] / 360,
+                255 * val[1] / 100,
+                255 * val[2] / 100)
+
+    result = {}
+    for k, (v1, v2) in color_dic.items():
+        result[k] = (cvt_tuple(v1), cvt_tuple(v2))
+    return result
+
+
+class_name = ("Blue", "Blue Gray", "Brown", "Brown Gray", "Brown Black", "Green", "Green Gray", "White", "Other")
+EyeColor = cvt_to_255({
     class_name[0] : ((166, 21, 50), (240, 100, 85)),
     class_name[1] : ((166, 2, 25), (300, 20, 75)),
     class_name[2] : ((2, 20, 20), (40, 100, 60)),
     class_name[3] : ((20, 3, 30), (65, 60, 60)),
     class_name[4] : ((0, 10, 5), (40, 40, 25)),
     class_name[5] : ((60, 21, 50), (165, 100, 85)),
-    class_name[6] : ((60, 2, 25), (165, 20, 65))
-}
+    class_name[6] : ((60, 2, 25), (165, 20, 65)),
+    class_name[7] : ((0, 0, 90), (355, 10, 100))
+})
 
 
 def parse_args():
@@ -68,10 +83,11 @@ def check_color(hsv, color):
 
 
 def find_class(hsv):
-    color_id = 7
-    for i in range(len(class_name)-1):
+    color_id = 8
+    for i in range(len(class_name) - 1):
         if check_color(hsv, EyeColor[class_name[i]]) == True:
             color_id = i
+            break
 
     return color_id
 
@@ -125,15 +141,22 @@ def get_eye_color(facePhoto):
     
     for y in range(0, height):
         for x in range(0, width):
-            if imgMask[y, x] != 0:
-                eye_class[find_class(facePhoto[y, x])] += 1
+            if imgMask[y, x]:
+                curr_color = find_class(facePhoto[y, x])
+                if curr_color in [7, 8]: continue
+                eye_class[curr_color] += 1
                 
     main_color_index = np.argmax(eye_class[:len(eye_class)-1])
     total_vote = eye_class.sum()
-    
+
     return map_to_cartoon(class_name[main_color_index])
 
 
+def get_eyes(img, mask):
+    img = cv2.bitwise_and(img, img, mask=mask)
+    img = cv2.cvtColor(img, cv2.COLOR_HSV2RGB)
+    plt.imshow(img)
+    
 if __name__ == '__main__':
     args = parse_args()
     image = cv2.imread(args['input'])
