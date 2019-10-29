@@ -1,16 +1,13 @@
-from flask import Flask, escape, request, jsonify
-from flask_cors import CORS
-import numpy as np
-import cv2
 import base64
-from PIL import Image
-import io
 import re
-from matcher import find_best_match, load_database
-import os
 
-from get_eye_color import get_eye_color
+import cv2
+from flask import Flask, request
+from flask_cors import CORS
+
 from face_color_classifier import get_skin_color_number
+from get_eye_color import get_eye_color
+from matcher import find_best_match, load_database
 
 app = Flask(__name__)
 CORS(app)
@@ -31,7 +28,7 @@ def generate_avatar():
         is_male = None
     cartoon_database = load_database(DB_PATH)
     params = { 'eye_color': eye_color, 'face_color': skin_color }
-    pic_for_user = find_best_match(cartoon_database, params, not is_male)[:-3] + 'png'
+    pic_for_user = find_best_match(cartoon_database, params, is_male)[:-3] + 'png'
     with open(pic_for_user, 'rb') as f:
         encoded_file = base64.b64encode(f.read())
         return encoded_file
