@@ -16,7 +16,7 @@
 
 `https://storage.cloud.google.com/cartoonset_public_files/cartoonset10k.tgz`
 
-И распаковать в корень проекта
+И распаковать в корень проекта. После этого в корне должна оказаться папка cartoonset10k
 
 Запустить сервер:
 
