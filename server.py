@@ -26,9 +26,12 @@ def generate_avatar():
     image = cv2.imread(file_name)
     eye_color = get_eye_color(image)
     skin_color = get_skin_color_number(image)
+    is_male = content['genderValue'] == 'male'
+    if content['genderValue']  == 'none':
+        is_male = None
     cartoon_database = load_database(DB_PATH)
     params = { 'eye_color': eye_color, 'face_color': skin_color }
-    pic_for_user = find_best_match(cartoon_database, params)[:-3] + 'png'
+    pic_for_user = find_best_match(cartoon_database, params, not is_male)[:-3] + 'png'
     with open(pic_for_user, 'rb') as f:
         encoded_file = base64.b64encode(f.read())
         return encoded_file
