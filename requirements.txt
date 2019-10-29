@@ -3,3 +3,7 @@ flask-cors
 opencv-python
 Pillow
 numpy
+torch
+torchvision
+dlib
+pytorch-ignite==0.1.0
