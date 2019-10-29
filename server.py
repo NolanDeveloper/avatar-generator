@@ -19,15 +19,15 @@ cnt=0
 DB_PATH="cartoonset10k"
 
 @app.route('/pic', methods=['POST'])
-def hello():
+def generate_avatar():
     content = request.json
     file_name = convert_base64_pic_to_ndarray(re.sub(r"data:image\/\w+;base64,", "", content['pic']))
     image = cv2.imread(file_name)
     eye_color = get_eye_color(image)
     cartoon_database = load_database(DB_PATH)
     params = { eye_color: eye_color }
-    pic_for_user = find_best_match(cartoon_database, params)
-    with open(os.path.join(DB_PATH, pic_for_user), 'rb') as f:
+    pic_for_user = find_best_match(cartoon_database, params)[:-3] + 'png'
+    with open(pic_for_user, 'rb') as f:
         encoded_file = base64.b64encode(f.read())
         return encoded_file
 
