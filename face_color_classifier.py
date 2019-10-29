@@ -9,6 +9,7 @@ def hsv(color):
     v = color[2] / 255 * 100
     return h, s, v
 
+
 def hsv_to_bgr(hsv):
     r = hsv[0] / 360 * 255
     g = hsv[1] / 100 * 255
@@ -48,7 +49,9 @@ def get_skin_color_number(image):
     return CORRESPONDENCE[n]
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
+    image= cv2.imread('./data/Figaro1k/Original/Testing/A.jpg')
+    get_skin_color_number(image)
 #     import sys
 #     import sklearn.cluster as sk
 #
