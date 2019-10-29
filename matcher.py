@@ -1,5 +1,6 @@
 import glob
 import csv
+import random
 
 
 PARAMETERS = [
@@ -25,7 +26,8 @@ PARAMETERS = [
 
 def load_database(db_path):
     database = {}
-    for name in glob.glob('{}/*.csv'.format(db_path)):
+    pattern = '{}/*.csv'.format(db_path)
+    for name in glob.glob(pattern):
         with open(name, 'r') as file:
             image = {}
             for row in csv.reader(file):
@@ -34,17 +36,26 @@ def load_database(db_path):
     return database
 
 
-def find_best_match(database, desired_parameters):
-    best_name = None
-    best_distance = None
-    for name, image in database.items():
-        distance = list(map(lambda parameter: image[parameter] != desired_parameters.get(parameter, 0), PARAMETERS))
-        if not best_distance or distance < best_distance:
-            best_name = name
-            best_distance = distance
-    return best_name
+GOOD_FACE_SHAPES = [1, 2, 3, 5, 6]
+
+
+def find_best_match(database, desired_parameters, is_male=None):
+    if is_male is None:
+        is_male = bool(random.getrandbits(1))
+    desired_parameters['eye_lashes'] = int(not is_male)
+    desired_parameters['face_shape'] = random.choice(GOOD_FACE_SHAPES)
+    desired_parameters['glasses'] = 11
+    desired_parameters['facial_hair'] = 14
+    images = database.items()
+    for parameter in PARAMETERS:
+        if parameter in desired_parameters:
+            new_mages = list(filter(lambda image: image[1][parameter] == desired_parameters[parameter], images))
+            if not new_mages:
+                break
+            images = new_mages
+    return random.choice(images)[0]
 
 
 if __name__ == '__main__':
-    print(find_best_match(load_database(), {'facial_hair': 2}))
+    print(find_best_match(load_database('./cartoonset10k'), {}))
 
