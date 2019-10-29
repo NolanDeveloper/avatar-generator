@@ -4,6 +4,7 @@ import random
 
 
 PARAMETERS = [
+    "hair",
     "facial_hair",
     "glasses",
     "glasses_color",
@@ -11,7 +12,6 @@ PARAMETERS = [
     "hair_color",
     "eye_color",
     "face_shape",
-    "hair",
     "eye_angle",
     "eyebrow_shape",
     "eye_eyebrow_distance",
