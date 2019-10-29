@@ -63,10 +63,12 @@ def find_best_match(database, desired_parameters, is_male=None):
 if __name__ == '__main__':
     from get_eye_color import get_eye_color
     from face_color_classifier import get_skin_color_number
+    from hair_classifier import get_hair_color_number
     image = cv2.imread('./CFD Version 2.0.3/CFD 2.0.3 Images/WM-238/CFD-WM-238-020-N.jpg')
     eye_color = get_eye_color(image)
     skin_color = get_skin_color_number(image)
+    hair_color = get_hair_color_number(image)
     cartoon_database = load_database('./cartoonset10k')
-    params = { 'eye_color': eye_color, 'face_color': skin_color }
+    params = { 'eye_color': eye_color, 'face_color': skin_color, 'hair_color': hair_color }
     pic_for_user = find_best_match(cartoon_database, params, True)[:-3] + 'png'
     print(pic_for_user)
