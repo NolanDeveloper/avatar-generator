@@ -15,6 +15,7 @@
 Возможно, возникнут проблемы с установкой cv2 и dlib. Их лучше ставить через anaconda.
 
 `conda install -c menpo dlib`
+
 `conda install -c conda-forge opencv`
 
 Скачать датасет:
