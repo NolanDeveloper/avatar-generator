@@ -51,6 +51,13 @@ def get_hair_color_number(image):
 
 
 if __name__ == '__main__':
+    image = cv2.imread('./tests/white-man.jpg')
+    color = cv2.cvtColor(np.array([[list(map(np.uint8, get_hair_color(image)))]]), cv2.COLOR_HSV2BGR)[0][0]
+    color = np.array([[color] * 100] * 100)
+
+
+
+
     # # image = cv2.imread('./data/Figaro1k/Original/Testing/Frame00010-org.jpg')
     # # image = cv2.imread('./data/Figaro1k/Original/Testing/Frame00032-org.jpg')
     # image = cv2.imread('./data/Figaro1k/Original/Testing/Frame00458-org.jpg')
@@ -60,26 +67,26 @@ if __name__ == '__main__':
     # cv2.imshow("Image", color_image)
     # cv2.waitKey(0)
 
-    import sys
-    import sklearn.cluster as sk
-    import os
-
-    dataset = []
-    for root, _, files in os.walk('data'):
-        for filename in files:
-            if filename.endswith('.jpg'):
-                dataset.append(get_hair_color_number(cv2.imread(root + "/" + filename)))
-                if not (len(dataset) % 10):
-                    print(len(dataset))
-                if len(dataset) == 100:
-                    break
-        if len(dataset) == 100:
-            break
-    model = sk.KMeans(n_clusters=15).fit(dataset)
-    for i in range(15):
-        # os.mkdir(str(i))
-        center = model.cluster_centers_[i]
-        image = np.array([[center] * 100] * 100)
-        cv2.imwrite(str(i) + '.jpg', image)
+    # import sys
+    # import sklearn.cluster as sk
+    # import os
+    #
+    # dataset = []
+    # for root, _, files in os.walk('data'):
+    #     for filename in files:
+    #         if filename.endswith('.jpg'):
+    #             dataset.append(get_hair_color_number(cv2.imread(root + "/" + filename)))
+    #             if not (len(dataset) % 10):
+    #                 print(len(dataset))
+    #             if len(dataset) == 100:
+    #                 break
+    #     if len(dataset) == 100:
+    #         break
+    # model = sk.KMeans(n_clusters=15).fit(dataset)
+    # for i in range(15):
+    #     # os.mkdir(str(i))
+    #     center = model.cluster_centers_[i]
+    #     image = np.array([[center] * 100] * 100)
+    #     cv2.imwrite(str(i) + '.jpg', image)
 
     # pickle.dump(model, open('model.dat', 'wb'))

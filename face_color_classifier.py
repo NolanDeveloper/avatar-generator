@@ -1,6 +1,7 @@
-import cv2
+import cv2 as cv2
 import numpy as np
 import pickle
+import sklearn
 
 
 def hsv(color):
@@ -49,9 +50,7 @@ def get_skin_color_number(image):
     return CORRESPONDENCE[n]
 
 
-if __name__ == '__main__':
-    image= cv2.imread('./data/Figaro1k/Original/Testing/A.jpg')
-    get_skin_color_number(image)
+# if __name__ == '__main__':
 #     import sys
 #     import sklearn.cluster as sk
 #

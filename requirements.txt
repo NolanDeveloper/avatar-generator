@@ -7,3 +7,4 @@ torch
 torchvision
 dlib
 pytorch-ignite==0.1.0
+sklearn
